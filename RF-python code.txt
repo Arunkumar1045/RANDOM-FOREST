@@ -1,0 +1,75 @@
+## Random forest
+import os
+import pandas as pd
+import numpy as np
+
+os.chdir("C:\\Users\\USER\\Desktop\\Python\\Class 10 Decision Tree_RForest")
+
+dataset = pd.read_csv("carseat.csv")
+dataset.iloc[0:1,]
+
+## converting object (character) to float (numeric)
+from sklearn import preprocessing
+le = preprocessing.LabelEncoder()
+
+dataset.ShelveLoc = le.fit_transform(dataset.ShelveLoc)
+dataset.ShelveLoc.unique()#dep variable
+
+dataset.Urban = le.fit_transform(dataset.Urban)
+dataset.US = le.fit_transform(dataset.US)
+
+dataset.ShelveLoc = le.fit_transform(dataset.ShelveLoc)
+
+dataset.high = le.fit_transform(dataset.high)
+
+
+
+
+
+
+X = dataset.drop('high', axis=1)
+Y = dataset['high']
+
+
+
+# split the dataset into 70% training and 30% testing
+import random
+random.seed(100)
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=0)
+
+
+from sklearn.ensemble import RandomForestClassifier
+rf = RandomForestClassifier(n_estimators=1000,random_state=0)
+rf.fit(X_train, y_train)
+y_pred = rf.predict(X_test)
+
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+print(confusion_matrix(y_test,y_pred))
+print(classification_report(y_test,y_pred))
+print(accuracy_score(y_test, y_pred))
+
+dataset.iloc[0:1,]
+data = dataset.ix[:,0:10]
+
+
+## variable importance
+import pandas as pd
+feature_imp = pd.Series(rf.feature_importances_,
+index=data.columns).sort_values(ascending=False)
+feature_imp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
